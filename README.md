@@ -76,7 +76,7 @@ qsiloop: // find leftmost number greater than pivot, save index to a2
 	cmp v1, v2
 	bgt qsjloop
 	add a2, a2, #1
-	cmp a2, a3 // comparing to the end of the list vs comparing to j is the same, but saves a register
+	cmp a2, a3 // comparing to the end of the list vs comparing to j is the same
 	blt qsiloop
 qsjloop: // find rightmost number less than pivot at, save index to a3
 	ldr v1, [a1, a3,lsl#2]
