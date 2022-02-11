@@ -26,13 +26,13 @@ qsjloop: // find rightmost number less than pivot at, save index to a3
 	subgt a3, a3, #1
 	bgt qsjloop
 	cmp a2, a3
-	// swap if out of order (could save 3 instructions by avoiding helper function)
+	// swap if out of order
 	ldrlt v3, [a1, a2,lsl#2]
 	strlt v3, [a1, a3,lsl#2]
 	strlt v1, [a1, a2,lsl#2]
 	blt qsiloop // repeat if maybe more out of order elements
 	mov a2, a4
-	// swap pivot with last number smaller than it (could save 4 instructions by avoiding helper function)
+	// swap pivot with last number smaller than it
 	str v2, [a1, a3,lsl#2]
 	str v1, [a1, a2,lsl#2]
 	sub a3, a3, #1
