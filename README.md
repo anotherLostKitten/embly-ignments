@@ -14,9 +14,9 @@ We are only using the scratch registers, and the function is iterative, so we do
 
 #### r0: n; returns r0 = n!
 
-Implementing this recursively is rather unfortunate, as an iterative or tail-recursive approach is very easy and removes all of these unessecary memory accesses. We do not need to save any registers upon entering the program, as we only use the scratch registers. First, we check for n < 2, as for both base cases 1! and 0! we will return 1, so only a single check is needed. Otherwise, we will need to push n (R0) and the link register to the stack, because we recurse into n-1!. Once this is done, we pop n into R1 (to not overwrite the result returned by n-1!), multiply and return by popping the link register into program counter.
+Implementing this recursively is rather unfortunate, as an iterative or tail-recursive approach is very easy and removes all of these unessecary memory accesses. We do not need to save any registers upon entering the program, as we only use the scratch registers. First, we check for n < 2, and for both base cases 1! and 0! we will return 1, so only a single check is needed. Otherwise, we will need to push n (R0) and the link register to the stack, because we recurse into n-1!. Once this is done, we pop n into R1 (to not overwrite the result returned by n-1!, which will be in R0), multiply and return by popping the link register into program counter.
 
-Here is a tail recursive implementation, the fac function sets the accumulator before calling recursing:
+Here is a tail recursive implementation, the fac function sets the accumulator before calling the recursive function:
 
 ```
 fac:
@@ -56,7 +56,9 @@ expr:
 
 #### a1/r0 : array pointer, a2/r1: start index, a3/r2: end index
 
-The swap function needs to save 2 temporary registers because each memory address needs to be loaded into a register before being swapped.
+The swap function needs to push 2 saved registers to the stack because each memory address needs to be loaded into a register before being swapped.
+
+The quicksort function uses 2 saved registers, for loading the values of the pivot and the array element we index through; we will also push a3 to the stack because we will need to get the end position of the array again at the very end of our function, before calling quicksort recursively from the pointer position + 1 to the end of the array, and in the meantime this value will get overwritten.
 
 In the quicksort function, there are a few things worth noting: firstly, it is unessecary to iterate i until the end of the list, but merely until it is greater than j; this is because once i surpasses j, no further swaps will be preformed, so any elements it finds in the remainder of the list are completely irrelevant. The value of i is not used anywhere else. Secondly, note that the 3 while loops in the c code template have been condensed into merely 2 labels here: this is because the outer while loop immediately begins the execution of the first loop to iterate i. Next, notice that at the very end of our quicksort function, we need to call quicksort twice, but after the second call the our quicksort function immediately ends; this means that we can call the second quicksort tail recursively, because there is nothing more to do in the parent recursive function.
 
