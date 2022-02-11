@@ -71,28 +71,28 @@ quicksort:
 	cmp a2, a3
 	bxge lr
 	push {a3, v1, v2, v3, lr}
-	mov a4, a2 // a4 = pivot location
+	mov a4, a2 // a2 = pivot location
 	ldr v2, [a1, a2,lsl#2] // v2 = pivot value
-qsiloop: // find leftmost number greater than pivot, save index to a2
-	ldr v3, [a1, a2,lsl#2] // v1 = possible out of order value
+qsiloop: // find leftmost number greater than pivot, save index to a4
+	ldr v3, [a1, a4,lsl#2] // v1 = possible out of order value
 	cmp v3, v2
 	bgt qsjloop
-	add a2, a2, #1
-	cmp a2, a3 // comparing to the end of the list vs comparing to j is the same
+	add a4, a4, #1
+	cmp a4, a3 // comparing to the end of the list vs comparing to j is the same
 	blt qsiloop
 qsjloop: // find rightmost number less than pivot at, save index to a3
 	ldr v1, [a1, a3,lsl#2]
 	cmp v1, v2
 	subgt a3, a3, #1
 	bgt qsjloop
-	cmp a2, a3
+	cmp a4, a3
 	// swap if out of order
 	bge qsloopout
 	str v3, [a1, a3,lsl#2]
-	str v1, [a1, a2,lsl#2]
+	str v1, [a1, a4,lsl#2]
 	b qsiloop // repeat if maybe more out of order elements
 qsloopout:
-	mov a2, a4
+	//mov a2, a4
 	// swap pivot with last number smaller than it
 	str v2, [a1, a3,lsl#2]
 	str v1, [a1, a2,lsl#2]
@@ -103,4 +103,4 @@ qsloopout:
 	b quicksort
 ```
 
-This runs with in 317 instructions executions, 79/46 loads/stores, and is 184 B, so I am fairly content with how optimized it is.
+This runs with in 311 instructions executions, 79/46 loads/stores, and is 184 B, so I am fairly content with how optimized it is.
